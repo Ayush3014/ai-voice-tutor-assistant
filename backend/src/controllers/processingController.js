@@ -5,35 +5,6 @@ const SummarizationService = require('../services/summarizationService');
 const transcriptionService = new TranscriptionService();
 const summarizationService = new SummarizationService();
 
-exports.startProcessing = async (req, res) => {
-  try {
-    const { videoUrl } = req.body;
-
-    if (!videoUrl) {
-      return res.status(400).json({ error: 'Video URL is required' });
-    }
-
-    // Create new processing job
-    const processingJob = new ProcessingJob({
-      videoUrl,
-      status: 'transcribing',
-    });
-    await processingJob.save();
-
-    // Start async processing
-    processVideo(processingJob._id, videoUrl);
-
-    res.status(202).json({
-      message: 'Processing started',
-      jobId: processingJob._id,
-      status: 'transcribing',
-    });
-  } catch (error) {
-    console.error('Error starting processing:', error);
-    res.status(500).json({ error: 'Failed to start processing' });
-  }
-};
-
 const processVideo = async (jobId, videoUrl) => {
   const job = await ProcessingJob.findById(jobId);
 
