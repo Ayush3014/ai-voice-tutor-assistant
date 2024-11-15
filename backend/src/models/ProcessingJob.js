@@ -21,10 +21,20 @@ const processingJobSchema = new mongoose.Schema({
       'transcribing',
       'transcribed',
       'summarizing',
+      'questionGenerating',
       'completed',
       'failed',
     ],
     default: 'pending',
+  },
+  questions: {
+    type: [
+      {
+        question: String,
+        answer: String,
+      },
+    ],
+    default: [],
   },
   error: {
     type: String,

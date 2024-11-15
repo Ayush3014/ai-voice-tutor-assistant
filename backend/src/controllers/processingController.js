@@ -63,7 +63,14 @@ const processVideo = async (jobId, videoUrl) => {
     const summary = await summarizationService.summarize(transcription);
     console.log('Summarized successfully!');
     job.summary = summary;
+    job.status = 'questionGenerating';
+
+    // step 4: generate questions
+    console.log(`Generating questions for job ${jobId}`);
+    const questions = await summarizationService.generateQuestions(summary);
+    job.questions = questions;
     job.status = 'completed';
+
     job.completedAt = new Date();
     await job.save();
   } catch (error) {
@@ -71,6 +78,33 @@ const processVideo = async (jobId, videoUrl) => {
     job.status = 'failed';
     job.error = error.message;
     await job.save();
+  }
+};
+
+exports.startProcessing = async (req, res) => {
+  try {
+    const { videoUrl } = req.body;
+
+    if (!videoUrl) {
+      return res.status(400).json({ error: 'Video URL is required' });
+    }
+
+    const processingJob = new ProcessingJob({
+      videoUrl,
+      status: 'transcribing',
+    });
+    await processingJob.save();
+
+    processVideo(processingJob._id, videoUrl);
+
+    res.status(202).json({
+      message: 'Processing started',
+      jobId: processingJob._id,
+      status: 'transcribing',
+    });
+  } catch (error) {
+    console.error('Error starting processing:', error);
+    res.status(500).json({ error: 'Failed to start processing' });
   }
 };
 
@@ -87,6 +121,7 @@ exports.getProcessingStatus = async (req, res) => {
       jobId: job._id,
       status: job.status,
       createdAt: job.createdAt,
+      questions: job.questions || [],
     };
 
     if (job.error) {
