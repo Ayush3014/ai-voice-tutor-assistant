@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@huggingface/inference": "^2.8.1",
     "aws-sdk": "^2.1691.0",
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
@@ -17,10 +18,12 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-rate-limit": "^7.4.1",
+    "groq-sdk": "^0.8.0",
     "helmet": "^8.0.0",
     "mongoose": "^8.8.0",
     "nodemon": "^3.1.7",
     "openai": "^4.71.0",
+    "replicate": "^1.0.1",
     "winston": "^3.16.0"
   }
 }
