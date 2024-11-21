@@ -3,10 +3,11 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const fs = require('fs');
 const connectDB = require('./config/database');
-// const summarizationRouter = require('./routes/summarization');
-// const transcriptionRouter = require('./routes/transcription');
 const processingRouter = require('./routes/processing');
+const voiceRouter = require('./routes/voiceRoutes');
+const transcriptionRouter = require('./routes/transcriptionRouter');
 
 const app = express();
 
@@ -17,6 +18,17 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// Ensure uploads directory exists
+// const ensureUploadsDirectory = async () => {
+//   try {
+//     await fs.mkdir('uploads', { recursive: true });
+//     console.log('Uploads directory ready');
+//   } catch (error) {
+//     console.error('Error creating uploads directory:', error);
+//     process.exit(1);
+//   }
+// };
+
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -25,12 +37,14 @@ const limiter = rateLimit({
     error: 'Too many requests from this IP, please try again after 15 minutes',
   },
 });
-app.use('/api/', limiter);
+// app.use('/api/', limiter);
 
 // Routes
 // app.use('/api', transcriptionRouter);
 // app.use('/api', summarizationRouter);
-app.use('/api/v1', processingRouter);
+app.use('/api/v1/voice', voiceRouter);
+app.use('/api/v1/', processingRouter);
+app.use('/api/v1/transcript', transcriptionRouter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -63,6 +77,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+const startServer = async () => {
+  // await ensureUploadsDirectory();
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+startServer();
