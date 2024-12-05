@@ -22,4 +22,6 @@ router.post(
   transcriptionController.transcribeAudio
 );
 
+router.post('/query/:jobId', transcriptionController.handleQuery);
+
 module.exports = router;
