@@ -38,9 +38,11 @@ exports.transcribeAudio = async (req, res) => {
 
 exports.handleQuery = async (req, res) => {
   console.log('Query request received');
+  console.log('request: ', req);
   const { jobId } = req.params;
   const { userQuery } = req.body;
-
+  console.log('jobid: ', jobId);
+  console.log('userQuery: ', userQuery);
   if (!jobId || !userQuery) {
     return res.status(400).json({ error: 'Missing jobId or userQuery' });
   }
