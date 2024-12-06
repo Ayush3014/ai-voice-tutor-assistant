@@ -5,9 +5,10 @@ exports.startVoiceSession = async (req, res) => {
   console.log('start voice session');
   try {
     const { jobId } = req.params;
+    if (!jobId) return res.status(400).json({ error: 'Job ID is required' });
     console.log('job id: ', jobId);
     const sessionData = await voiceService.createVoiceSession(jobId);
-    res.json(sessionData);
+    res.status(200).json(sessionData);
   } catch (error) {
     console.error('Error starting voice session:', error);
     res.status(500).json({ error: 'Failed to start voice session' });

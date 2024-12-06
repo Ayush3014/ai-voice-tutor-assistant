@@ -20,7 +20,6 @@ class VoiceInteractionService {
     try {
       // Dynamically import LiveKit
       const { AccessToken } = await import('livekit-server-sdk');
-      const { Room } = await import('livekit-client');
       console.log('imported successfully!!');
       const roomName = `voice-session-${jobId}`;
 
