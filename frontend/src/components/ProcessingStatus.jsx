@@ -16,7 +16,8 @@ const ProcessingStatus = () => {
         setStatus(data.status);
 
         if (data.status === 'completed') {
-          navigate(`/session/${jobId}`);
+          // navigate(`/session/${jobId}`);
+          setStatus('Processing complete');
         }
       } catch (error) {
         console.error('Error:', error);
@@ -36,6 +37,25 @@ const ProcessingStatus = () => {
         Current status:{' '}
         <span className="font-semibold text-blue-600">{status}</span>
       </p>
+      <div>
+        hello
+        {
+          <div className="mt-4 flex gap-4">
+            <button
+              onClick={() => navigate(`/query/${jobId}`)}
+              className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600"
+            >
+              Ask Queries
+            </button>
+            <button
+              onClick={() => navigate(`/session/${jobId}`)}
+              className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600"
+            >
+              Start Voice Session
+            </button>
+          </div>
+        }
+      </div>
     </div>
   );
 };
