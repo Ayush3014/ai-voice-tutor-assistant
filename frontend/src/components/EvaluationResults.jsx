@@ -21,7 +21,7 @@ const EvaluationResultsPage = () => {
           className="evaluation-item bg-white p-4 mb-4 rounded border border-gray-300"
         >
           <p className="text-gray-800 font-medium mb-2">
-            <strong>Feedback:</strong> {evaluation.userAnswer}
+            <strong>User Answer:</strong> {evaluation.userAnswer}
           </p>
           <p className="text-gray-800 font-medium mb-2">
             <strong>Feedback:</strong> {evaluation.feedback}
